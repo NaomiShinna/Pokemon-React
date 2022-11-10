@@ -1,24 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Suspense } from "react";
+import { HashRouter, Route, Routes } from "react-router-dom";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+  const loading = (
+    <div className="pt-3 text-center">
+      <div className="sk-spinner sk-spinner-pulse"></div>
     </div>
+  );
+
+  const Index = React.lazy(() => import("./pages/index"));
+  const DetailPokemon = React.lazy(() => import("./pages/detailPokemon"));
+
+  return (
+    <HashRouter>
+      <Suspense fallback={loading}>
+        <Routes>
+          <Route
+            exact
+            path="/:idPokemon"
+            name="Detail Pokemon"
+            element={<DetailPokemon />}
+          />
+          <Route path="*" name="Index" element={<Index />} />
+        </Routes>
+      </Suspense>
+    </HashRouter>
   );
 }
 
